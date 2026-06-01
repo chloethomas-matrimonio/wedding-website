@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chloé & Thomas – Wedding</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Letter Opening Animation -->
+    <div class="letter-overlay active" id="letterOverlay">
+        <div class="letter-container">
+            <div class="envelope" id="envelope" onclick="openLetterAnimation()">
+                <!-- Realistic Vintage Envelope SVG -->
+                <svg class="envelope-svg" viewBox="0 0 1000 880" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Subtle grain texture -->
+                        <filter id="grain">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" result="noise"/>
+                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.8"/>
+                        </filter>
+                        
+                        <!-- Paper texture pattern -->
+                        <pattern id="paperTexture" patternUnits="userSpaceOnUse" width="12" height="12">
+                            <rect width="12" height="12" fill="#F5ECE4"/>
+                            <circle cx="3" cy="3" r="0.4" fill="#E8DCC8" opacity="0.1"/>
+                            <circle cx="9" cy="9" r="0.3" fill="#E8DCC8" opacity="0.08"/>
+                        </pattern>
+                    </defs>
+                    
+                    <!-- Soft shadow beneath envelope -->
+                    <ellipse cx="500" cy="750" rx="240" ry="32" fill="#2C3E3B" opacity="0.08"/>
+                    
+                    <!-- Main envelope body -->
+                    <rect x="70" y="172" width="860" height="414" fill="url(#paperTexture)" stroke="#D4C4B4" stroke-width="2.5" filter="url(#grain)"/>
+                    
+                    <!-- Very subtle left edge shadow -->
+                    <path d="M 70 172 L 66 185 L 66 560 L 70 575 Z" fill="#000000" opacity="0.03"/>
+                    
+                    <!-- Very subtle right edge shadow -->
+                    <path d="M 930 172 L 934 185 L 934 560 L 930 575 Z" fill="#000000" opacity="0.03"/>
+                    
+                    <!-- Main flap - large triangle -->
+                    <path id="envelopeFlap" d="M 70 172 L 500 380 L 930 172" fill="#EBE0D5" stroke="#D4C4B4" stroke-width="2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                    
+                    <!-- Left flap side - darker for depth -->
+                    <path d="M 70 172 L 500 380 L 250 276 Z" fill="#DDD2C8" opacity="0.5" stroke="none"/>
+                    
+                    <!-- Right flap side - darker for depth -->
+                    <path d="M 930 172 L 500 380 L 750 276 Z" fill="#D4C4B4" opacity="0.4" stroke="none"/>
+                    
+                    <!-- Visible fold lines from center -->
+                    <line x1="500" y1="172" x2="500" y2="590" stroke="#D4C4B4" stroke-width="1" opacity="0.25"/>
+                    
+                    <!-- Subtle diagonal crease left -->
+                    <line x1="70" y1="172" x2="500" y2="590" stroke="#C9BFAF" stroke-width="0.8" opacity="0.15"/>
+                    
+                    <!-- Subtle diagonal crease right -->
+                    <line x1="930" y1="172" x2="500" y2="590" stroke="#C9BFAF" stroke-width="0.8" opacity="0.15"/>
+                    
+                    <!-- Envelope front text - minimal -->
+                    <g id="envelopeText" class="envelope-text">
+                        <text x="500" y="290" font-family="Playfair Display, serif" font-size="50" fill="#6B7280" text-anchor="middle" font-weight="600" letter-spacing="4">Chloé & Thomas</text>
+                        <text x="500" y="335" font-family="Lora, serif" font-size="18" fill="#9CA3AF" text-anchor="middle" letter-spacing="3" font-weight="400">WEDDING INVITATION</text>
+                    </g>
+                    
+                    <!-- Wax Seal - simple and elegant -->
+                    <g id="waxSeal">
+                        <!-- Seal circle base -->
+                        <circle cx="500" cy="380" r="42" fill="#C9956C" filter="url(#grain)"/>
+                        
+                        <!-- Seal glossy highlight -->
+                        <circle cx="497" cy="372" r="35" fill="#D9A876" opacity="0.4"/>
+                        
+                        <!-- Seal rim -->
+                        <circle cx="500" cy="380" r="42" fill="none" stroke="#A67A52" stroke-width="2.5"/>
+                        
+                        <!-- Initials - clean and simple -->
+                        <text x="500" y="390" font-family="Playfair Display, serif" font-size="28" fill="#F5ECE4" text-anchor="middle" font-weight="700" letter-spacing="1">C&T</text>
+                        
+                        <!-- Single decorative circle -->
+                        <circle cx="500" cy="380" r="38" fill="none" stroke="#F5ECE4" stroke-width="0.8" opacity="0.6"/>
+                    </g>
+                    
+                    <!-- Subtle click text -->
+                    <text x="500" y="650" font-family="Lora, serif" font-size="16" fill="#C9BFAF" text-anchor="middle" opacity="0.7">Click to open</text>
+                </svg>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">C & T</a>
+            <ul class="nav-menu">
+                <li><a href="#story" class="nav-link" data-en="Story" data-fr="Notre Histoire">Story</a></li>
+                <li><a href="#details" class="nav-link" data-en="Details" data-fr="Détails">Details</a></li>
+                <li><a href="#travel" class="nav-link" data-en="Travel" data-fr="Voyage">Travel</a></li>
+                <li><a href="#rsvp" class="nav-link" data-en="RSVP" data-fr="RSVP">RSVP</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <span class="lang-divider">|</span>
+                <button class="lang-btn" data-lang="fr">FR</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1><span class="hero-name">Chloé & Thomas</span></h1>
+            <p class="subtitle" data-en="A Celebration of Love" data-fr="Une Célébration de l'Amour">A Celebration of Love</p>
+            <div class="hero-date">
+                <span>31 July, 2027</span>
+                <span class="divider">•</span>
+                <span data-en="Formigine, Italy" data-fr="Formigine, Italie">Formigine, Italy</span>
+            </div>
+            <a href="#story" class="scroll-btn" data-en="Scroll to explore" data-fr="Découvrez notre histoire">Scroll to explore</a>
+        </div>
+        <div class="hero-background"></div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="story">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-en="Our Story" data-fr="Notre Histoire">Our Story</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="story-content">
+                <div class="story-video">
+                    <video autoplay muted loop playsinline preload="metadata">
+                        <source src="Presentation1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="story-text">
+                    <p class="translatable" data-en="We met at the right moment and fell in love instantly. After years of shared adventures, laughter, and unforgettable memories, we're excited to celebrate this special day with our loved ones." data-fr="Nous nous sommes rencontrés au bon moment et avons immédiatement tombé amoureux. Après des années d'aventures partagées, de rires et de souvenirs inoubliables, nous sommes enthousiastes de célébrer cette journée spéciale avec nos proches.">We met at the right moment and fell in love instantly. After years of shared adventures, laughter, and unforgettable memories, we're excited to celebrate this special day with our loved ones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Details Section -->
+    <section id="details" class="details-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-en="Wedding Details" data-fr="Détails du Mariage">Wedding Details</h2>
+                <div class="header-line"></div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3v4M8 3v4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 11h5v5H7z" fill="currentColor" opacity="0.04"/>
+                        </svg>
+                    </div>
+                    <h3 class="translatable" data-en="Date" data-fr="Date">Date</h3>
+                    <p><span class="translatable" data-en="Sunday" data-fr="Dimanche">Sunday</span><br><span class="translatable" data-en="July 31, 2027" data-fr="31 juillet, 2027">July 31, 2027</span></p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 7v6l4 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="translatable" data-en="Time" data-fr="Heure">Time</h3>
+                    <p>4:00 PM<br><span class="translatable" data-en="Evening Reception" data-fr="Réception du soir">Evening Reception</span></p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3 class="translatable" data-en="Location" data-fr="Lieu">Location</h3>
+                    <p>Villa Botanica<br><span class="translatable" data-en="Formigine, Italy" data-fr="Formigine, Italie">Formigine, Italy</span></p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M7 5h10l1 6-2 3h-8l-2-3 1-6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 5v-2h6v2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 11h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="translatable" data-en="Dress Code" data-fr="Code de Tenue">Dress Code</h3>
+                    <p><span class="translatable" data-en="Elegant Casual" data-fr="Élégant Décontracté">Elegant Casual</span><br><span class="translatable" data-en="Summer Attire" data-fr="Tenue d'Été">Summer Attire</span></p>
+                </div>
+            </div>
+
+            <div class="event-details">
+                <div class="event-block">
+                    <h3 class="translatable" data-en="Ceremony" data-fr="Cérémonie">Ceremony</h3>
+                    <p class="translatable" data-en="Join us as we exchange vows in an intimate garden ceremony overlooking the Tuscan hills." data-fr="Rejoignez-nous lors d'une cérémonie intime dans un jardin avec vue sur les collines toscanes.">Join us as we exchange vows in an intimate garden ceremony overlooking the Tuscan hills.</p>
+                </div>
+                <div class="event-block">
+                    <h3 class="translatable" data-en="Reception" data-fr="Réception">Reception</h3>
+                    <p class="translatable" data-en="Celebrate with us through an evening of fine dining, dancing, and unforgettable moments with friends and family." data-fr="Célébrez avec nous une soirée de gastronomie fine, de danse et de moments inoubliables en famille et entre amis.">Celebrate with us through an evening of fine dining, dancing, and unforgettable moments with friends and family.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Section -->
+    <section id="travel" class="travel-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-en="Travel & Stay" data-fr="Voyage & Séjour">Travel & Stay</h2>
+                <div class="header-line"></div>
+            </div>
+
+            <div class="travel-grid">
+                <div class="travel-card">
+                    <h3 class="translatable" data-en="🛫 Getting There" data-fr="🛫 Comment s'y rendre">🛫 Getting There</h3>
+                    <p class="translatable" data-en="International flights are available to Milan (MXP) or Rome (FCO). From there, it's a scenic 2-3 hour drive to Tuscany." data-fr="Des vols internationaux sont disponibles à Milan (MXP) ou Rome (FCO). De là, c'est un trajet panoramique de 2-3 heures vers la Toscane.">International flights are available to Milan (MXP) or Rome (FCO). From there, it's a scenic 2-3 hour drive to Tuscany.</p>
+                    <ul>
+                        <li>Milan Malpensa (MXP)</li>
+                        <li>Rome Fiumicino (FCO)</li>
+                        <li>Florence Amerigo Vespucci (FLR)</li>
+                    </ul>
+                </div>
+
+                <div class="travel-card">
+                    <h3 class="translatable" data-en="🏨 Accommodation" data-fr="🏨 Hébergement">🏨 Accommodation</h3>
+                    <p class="translatable" data-en="We've arranged special rates at beautiful villas near the venue. Contact us for recommendations." data-fr="Nous avons négocié des tarifs spéciaux dans de magnifiques villas près du lieu. Contactez-nous pour des recommandations.">We've arranged special rates at beautiful villas near the venue. Contact us for recommendations.</p>
+                    <ul>
+                        <li class="translatable" data-en="Luxury Villas available" data-fr="Villas de luxe disponibles">Luxury Villas available</li>
+                        <li class="translatable" data-en="Charming Guesthouses" data-fr="Charmantes maisons d'hôtes">Charming Guesthouses</li>
+                        <li class="translatable" data-en="Group discounts offered" data-fr="Réductions de groupe proposées">Group discounts offered</li>
+                    </ul>
+                </div>
+
+                <div class="travel-card">
+                    <h3 class="translatable" data-en="🚗 Transportation" data-fr="🚗 Transport">🚗 Transportation</h3>
+                    <p class="translatable" data-en="We recommend renting a car for flexibility. We'll also arrange complimentary shuttles from nearby towns." data-fr="Nous recommandons la location de voiture pour la flexibilité. Nous organiserons également des navettes gratuites depuis les villes voisines.">We recommend renting a car for flexibility. We'll also arrange complimentary shuttles from nearby towns.</p>
+                    <ul>
+                        <li class="translatable" data-en="Shuttle service provided" data-fr="Service de navette fourni">Shuttle service provided</li>
+                        <li class="translatable" data-en="Car rental info included" data-fr="Informations sur la location incluses">Car rental info included</li>
+                        <li class="translatable" data-en="Local guide available" data-fr="Guide local disponible">Local guide available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="rsvp-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-en="RSVP" data-fr="RSVP">RSVP</h2>
+                <div class="header-line"></div>
+                <p class="section-subtitle translatable" data-en="Please respond by June 30, 2027" data-fr="Veuillez répondre avant le 30 juin 2027">Please respond by June 30, 2027</p>
+            </div>
+
+            <form class="rsvp-form" id="rsvpForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" class="translatable" data-en="Full Name" data-fr="Nom complet">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="translatable" data-en="Email Address" data-fr="Adresse e-mail">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone" class="translatable" data-en="Phone Number" data-fr="Numéro de téléphone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="guests" class="translatable" data-en="Number of Guests" data-fr="Nombre d'invités">Number of Guests</label>
+                        <select id="guests" name="guests" required>
+                            <option value="" class="translatable" data-en="Select..." data-fr="Sélectionner...">Select...</option>
+                            <option value="1" class="translatable" data-en="1 Guest" data-fr="1 invité">1 Guest</option>
+                            <option value="2" class="translatable" data-en="2 Guests" data-fr="2 invités">2 Guests</option>
+                            <option value="3" class="translatable" data-en="3 Guests" data-fr="3 invités">3 Guests</option>
+                            <option value="4" class="translatable" data-en="4 Guests" data-fr="4 invités">4 Guests</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="translatable" data-en="Will you attend?" data-fr="Allez-vous participer?">Will you attend?</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="attendance" value="yes" required>
+                            <span class="translatable" data-en="Yes, I'll be there!" data-fr="Oui, j'y serai!">Yes, I'll be there!</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="attendance" value="no">
+                            <span class="translatable" data-en="Sorry, can't attend" data-fr="Désolé, je ne peux pas venir">Sorry, can't attend</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="attendance" value="maybe">
+                            <span class="translatable" data-en="Still deciding" data-fr="Je décide encore">Still deciding</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="dietary" class="translatable" data-en="Dietary Restrictions" data-fr="Restrictions alimentaires">Dietary Restrictions</label>
+                    <textarea id="dietary" name="dietary" class="translatable" data-en="Vegetarian, vegan, allergies, etc." data-fr="Végétarien, végan, allergies, etc." placeholder="Vegetarian, vegan, allergies, etc."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit translatable" data-en="Submit RSVP" data-fr="Soumettre RSVP">Submit RSVP</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Chloé & Thomas</h4>
+                    <p class="translatable" data-en="Celebrating love in Tuscany" data-fr="Célébrer l'amour en Toscane">Celebrating love in Tuscany</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="translatable" data-en="Contact" data-fr="Contact">Contact</h4>
+                    <p>wedding@example.com<br>+33 (1) 23-45-67</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="translatable" data-en="Location" data-fr="Lieu">Location</h4>
+                    <p>Villa Botanica<br><span class="translatable" data-en="Formigine, Italy" data-fr="Formigine, Italie">Formigine, Italy</span></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="translatable" data-en="&copy; 2027 Chloé & Thomas Wedding. Made with love." data-fr="&copy; 2027 Mariage Chloé & Thomas. Fait avec amour.">&copy; 2027 Chloé & Thomas Wedding. Made with love.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+        })();
+    </script>
+    <script src="script.js"></script>
+    
+    <!-- Floating warm stars -->
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+    <div class="floating-star">✨</div>
+</body>
+</html>
