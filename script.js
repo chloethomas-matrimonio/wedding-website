@@ -1,20 +1,66 @@
+// Password Protection
+const CORRECT_PASSWORD = 'Italie2027';
+const PASSWORD_SESSION_KEY = 'wedding_authenticated';
+
+function checkPassword(event) {
+    event.preventDefault();
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordError = document.getElementById('passwordError');
+    const envelopePassword = document.getElementById('envelopePassword');
+    
+    if (passwordInput.value === CORRECT_PASSWORD) {
+        sessionStorage.setItem(PASSWORD_SESSION_KEY, 'true');
+        passwordError.style.display = 'none';
+        if (envelopePassword) envelopePassword.classList.add('hidden');
+        openLetterAnimation();
+    } else {
+        passwordError.style.display = 'block';
+        passwordInput.value = '';
+        passwordInput.focus();
+    }
+}
+
+// Check if already authenticated (for page refreshes during session)
+function checkAuthentication() {
+    const letterOverlay = document.getElementById('letterOverlay');
+    const envelopePassword = document.getElementById('envelopePassword');
+    if (sessionStorage.getItem(PASSWORD_SESSION_KEY) === 'true') {
+        if (letterOverlay) {
+            letterOverlay.classList.add('hidden');
+            setTimeout(() => {
+                letterOverlay.style.display = 'none';
+            }, 800);
+        }
+        if (envelopePassword) envelopePassword.classList.add('hidden');
+    } else {
+        const passwordInput = document.getElementById('passwordInput');
+        if (passwordInput) {
+            passwordInput.focus();
+        }
+    }
+}
+
 // Open Letter Animation - Trigger envelope opening
-function openLetterAnimation() {
+function openLetterAnimation(event) {
     const envelope = document.getElementById('envelope');
     const overlay = document.getElementById('letterOverlay');
     
+    if (event && event.target.closest('form')) return;
+    if (sessionStorage.getItem(PASSWORD_SESSION_KEY) !== 'true') {
+        const passwordInput = document.getElementById('passwordInput');
+        if (passwordInput) passwordInput.focus();
+        return;
+    }
+
     // Prevent multiple clicks
     if (envelope.classList.contains('opening')) return;
     
-    // Start envelope opening animation
     envelope.classList.add('opening');
     
-    // After animation completes, hide overlay and show website
     setTimeout(() => {
         overlay.classList.remove('active');
         overlay.classList.add('hidden');
         
-        // Scroll to top when site is revealed
         window.scrollTo(0, 0);
     }, 2200);
 }
@@ -73,7 +119,11 @@ function initLanguageSwitcher() {
     });
 }
 
-// RSVP Form Handler
+// Initialize EmailJS when SDK is ready
+// (No longer needed - using FormSubmit instead)
+
+
+// RSVP Form Handler - Using FormSubmit service
 const rsvpForm = document.getElementById('rsvpForm');
 
 const alertMessages = {
@@ -84,15 +134,54 @@ const alertMessages = {
 rsvpForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
-    .then(function() {
-        const language = document.documentElement.lang || 'en';
-        alert(alertMessages[language](document.getElementById('name').value));
-        rsvpForm.reset();
-    }, function(error) {
-        console.error('EmailJS error:', error);
-        alert('Sorry, there was a problem sending your RSVP. Please try again later.');
-    });
+    console.log('✓ RSVP form submit handler triggered');
+    const name = document.getElementById('name').value;
+    const language = document.documentElement.lang || 'en';
+    
+    const submitBtn = this.querySelector('.btn-submit');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset._origText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+    }
+
+    // Show success message immediately
+    alert(alertMessages[language](name));
+
+    // Submit form to FormSubmit service
+    try {
+        // Create FormData from the form
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('✓ RSVP submitted successfully');
+            rsvpForm.reset();
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
+                delete submitBtn.dataset._origText;
+            }
+        })
+        .catch(error => {
+            console.error('✗ Form submission error:', error);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
+                delete submitBtn.dataset._origText;
+            }
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
+            delete submitBtn.dataset._origText;
+        }
+    }
 });
 
 // Smooth Navigation
@@ -122,9 +211,14 @@ window.addEventListener('scroll', function() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Check password authentication first
+    checkAuthentication();
+    
     const envelope = document.getElementById('envelope');
     envelope.classList.remove('opening');
     initLanguageSwitcher();
     setLanguage('en');
-    console.log('Wedding site loaded - Click on envelope to open');
+    
+    console.log('🎊 Wedding site loaded');
+    console.log('✓ Form handler ready (using FormSubmit service)');
 });

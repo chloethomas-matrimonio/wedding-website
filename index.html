@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
     <!-- Letter Opening Animation -->
     <div class="letter-overlay active" id="letterOverlay">
         <div class="letter-container">
-            <div class="envelope" id="envelope" onclick="openLetterAnimation()">
+            <div class="envelope" id="envelope" onclick="openLetterAnimation(event)">
                 <!-- Realistic Vintage Envelope SVG -->
                 <svg class="envelope-svg" viewBox="0 0 1000 880" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -82,10 +82,15 @@
                         <circle cx="500" cy="380" r="38" fill="none" stroke="#F5ECE4" stroke-width="0.8" opacity="0.6"/>
                     </g>
                     
-                    <!-- Subtle click text -->
-                    <text x="500" y="650" font-family="Lora, serif" font-size="16" fill="#C9BFAF" text-anchor="middle" opacity="0.7">Click to open</text>
+                    <!-- Subtle click text removed per request -->
                 </svg>
-                </svg>
+                <div class="envelope-password" id="envelopePassword">
+                    <form id="passwordForm" onsubmit="checkPassword(event)">
+                        <input type="password" id="passwordInput" placeholder="Mot de passe" required autofocus>
+                        <button type="submit">Ouvrir</button>
+                    </form>
+                    <div id="passwordError" class="password-error" style="display:none;">Mot de passe incorrect. Réessayez.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -140,7 +145,11 @@
                     </video>
                 </div>
                 <div class="story-text">
-                    <p class="translatable" data-en="We met at the right moment and fell in love instantly. After years of shared adventures, laughter, and unforgettable memories, we're excited to celebrate this special day with our loved ones." data-fr="Nous nous sommes rencontrés au bon moment et avons immédiatement tombé amoureux. Après des années d'aventures partagées, de rires et de souvenirs inoubliables, nous sommes enthousiastes de célébrer cette journée spéciale avec nos proches.">We met at the right moment and fell in love instantly. After years of shared adventures, laughter, and unforgettable memories, we're excited to celebrate this special day with our loved ones.</p>
+                    <p class="translatable"
+                       data-en="From France to England, our hearts have travelled far, but it is in Italy that they found their most beautiful refuge. We are delighted to invite you to our wedding in Italy to celebrate our love and share our world with you. Pack your bags, la Dolce Vita awaits you!"
+                       data-fr="De la France à l'Angleterre, nos cœurs ont beaucoup voyagé, mais c'est en Italie qu'ils ont trouvé leur plus beau refuge. Nous sommes heureux de vous convier à notre mariage en Italie pour célébrer notre amour et partager avec vous notre univers. Préparez vos valises, la Dolce Vita n'attend plus que vous !">
+                        From France to England, our hearts have travelled far, but it is in Italy that they found their most beautiful refuge. We are delighted to invite you to our wedding in Italy to celebrate our love and share our world with you. Pack your bags, la Dolce Vita awaits you!
+                    </p>
                 </div>
             </div>
         </div>
@@ -176,7 +185,7 @@
                     <h3 class="translatable" data-en="Time" data-fr="Heure">Time</h3>
                     <p>4:00 PM<br><span class="translatable" data-en="Evening Reception" data-fr="Réception du soir">Evening Reception</span></p>
                 </div>
-                <div class="detail-card">
+                <a href="https://www.google.com/maps/search/Corte+Villa+Spalletti,+Rubiera,+Italy" target="_blank" rel="noopener noreferrer" class="detail-card" style="text-decoration: none; color: inherit; cursor: pointer;">
                     <div class="detail-icon">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
@@ -184,8 +193,8 @@
                         </svg>
                     </div>
                     <h3 class="translatable" data-en="Location" data-fr="Lieu">Location</h3>
-                    <p>Villa Botanica<br><span class="translatable" data-en="Formigine, Italy" data-fr="Formigine, Italie">Formigine, Italy</span></p>
-                </div>
+                    <p>Corte Villa Spalletti<br><span class="translatable" data-en="Rubiera, Italy" data-fr="Rubiera, Italie">Rubiera, Italy</span></p>
+                </a>
                 <div class="detail-card">
                     <div class="detail-icon">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -202,11 +211,31 @@
             <div class="event-details">
                 <div class="event-block">
                     <h3 class="translatable" data-en="Ceremony" data-fr="Cérémonie">Ceremony</h3>
-                    <p class="translatable" data-en="Join us as we exchange vows in an intimate garden ceremony overlooking the Tuscan hills." data-fr="Rejoignez-nous lors d'une cérémonie intime dans un jardin avec vue sur les collines toscanes.">Join us as we exchange vows in an intimate garden ceremony overlooking the Tuscan hills.</p>
+                    <p class="translatable"
+                       data-en="It all begins here! We look forward to seeing you at Fiorano Sanctuary, Piazzale Papa Giovanni Paolo II, 41042 Fiorano Modenese MO, at 4 PM sharp to celebrate our union."
+                       data-fr="C'est ici que tout commence ! Nous vous donnons rendez vous au Sanctuaire de Fiornano, Piazzale Papa Giovanni Paolo II, 41042 Fiorano Modenese MO, à 16h précise pour célébrer notre union.">
+                        It all begins here! We look forward to seeing you at Fiorano Sanctuary, Piazzale Papa Giovanni Paolo II, 41042 Fiorano Modenese MO, at 4 PM sharp to celebrate our union.
+                    </p>
                 </div>
                 <div class="event-block">
                     <h3 class="translatable" data-en="Reception" data-fr="Réception">Reception</h3>
-                    <p class="translatable" data-en="Celebrate with us through an evening of fine dining, dancing, and unforgettable moments with friends and family." data-fr="Célébrez avec nous une soirée de gastronomie fine, de danse et de moments inoubliables en famille et entre amis.">Celebrate with us through an evening of fine dining, dancing, and unforgettable moments with friends and family.</p>
+                    <p class="translatable"
+                       data-en="Let the celebration begin! Right after our 'Yes', join us at Corte Villa Spalletti to kick off the festivities. The venue is about twenty minutes' drive from the church.
+
+After an aperitivo to toast our reunion, enjoy a 100% Italian dinner — the perfect chance to taste our favourite specialties. Once well fed, we count on you to set the dance floor alight alongside us.
+
+Prepare your stomachs, fans (it will be warm!) and your dancing shoes!"
+                       data-fr="Place à la fête ! Juste après notre \"Sì\", rejoignez-nous à la Corte Villa Spalletti pour lancer les festivités. Le domaine se situe à une vingtaines de minutes de l'église en voiture.
+
+Après un aperitivo pour trinquer à nos retrouvailles, place à un dîner 100 % italien, l'occasion parfaite pour vous faire découvrir nos spécialités préférées. Une fois bien régalés, on compte sur vous pour enflammer la piste de danse à nos côtés.
+
+Préparez vos estomacs, vos éventails (il va faire chaud!) et vos chaussures de danse!">
+                        Let the celebration begin! Right after our 'Yes', join us at Corte Villa Spalletti to kick off the festivities. The venue is about twenty minutes' drive from the church.
+
+After an aperitivo to toast our reunion, enjoy a 100% Italian dinner — the perfect chance to taste our favourite specialties. Once well fed, we count on you to set the dance floor alight alongside us.
+
+Prepare your stomachs, fans (it will be warm!) and your dancing shoes!
+                    </p>
                 </div>
             </div>
         </div>
@@ -218,6 +247,14 @@
             <div class="section-header">
                 <h2 class="section-title" data-en="Travel & Stay" data-fr="Voyage & Séjour">Travel & Stay</h2>
                 <div class="header-line"></div>
+            </div>
+
+            <div class="travel-intro">
+                <p class="translatable"
+                   data-en="Crossing borders to celebrate our love is the greatest gift, and we want to make your trip as easy as possible! Here are the key details to plan your stay."
+                   data-fr="Traverser les frontières pour venir célébrer notre amour est le plus beau des cadeaux, et nous voulons vous faciliter l'aventure au maximum ! Voici toutes les clés pour planifier votre séjour.">
+                    Crossing borders to celebrate our love is the greatest gift, and we want to make your trip as easy as possible! Here are the key details to plan your stay.
+                </p>
             </div>
 
             <div class="travel-grid">
@@ -263,7 +300,7 @@
                 <p class="section-subtitle translatable" data-en="Please respond by June 30, 2027" data-fr="Veuillez répondre avant le 30 juin 2027">Please respond by June 30, 2027</p>
             </div>
 
-            <form class="rsvp-form" id="rsvpForm">
+            <form class="rsvp-form" id="rsvpForm" action="https://formsubmit.co/chloethomas.matrimonio@gmail.com" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name" class="translatable" data-en="Full Name" data-fr="Nom complet">Full Name</label>
@@ -315,6 +352,25 @@
                     <textarea id="dietary" name="dietary" class="translatable" data-en="Vegetarian, vegan, allergies, etc." data-fr="Végétarien, végan, allergies, etc." placeholder="Vegetarian, vegan, allergies, etc."></textarea>
                 </div>
 
+                <div class="form-group full-width">
+                    <label class="translatable" data-en="Will you join us on Sunday for a casual get-together?" data-fr="Serez-vous des nôtres le dimanche midi ?">Will you join us on Sunday for a casual get-together?</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="sunday" value="yes">
+                            <span class="translatable" data-en="Yes, count me in" data-fr="Oui ! Un dernier verre et quelques spécialités de plus">Yes, count me in</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="sunday" value="no">
+                            <span class="translatable" data-en="No, I'll be heading home" data-fr="Non, j'aurais beaucoup aimé mais mes valises m'appellent déjà">No, I'll be heading home</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="message" class="translatable" data-en="A message for the couple" data-fr="Un message pour les futurs mariés">A message for the couple</label>
+                    <textarea id="message" name="message" placeholder="" class="translatable" data-en="Write a short message to the couple" data-fr="Écris un petit mot pour les mariés"></textarea>
+                </div>
+
                 <button type="submit" class="btn-submit translatable" data-en="Submit RSVP" data-fr="Soumettre RSVP">Submit RSVP</button>
             </form>
         </div>
@@ -334,7 +390,7 @@
                 </div>
                 <div class="footer-section">
                     <h4 class="translatable" data-en="Location" data-fr="Lieu">Location</h4>
-                    <p>Villa Botanica<br><span class="translatable" data-en="Formigine, Italy" data-fr="Formigine, Italie">Formigine, Italy</span></p>
+                    <p>Corte Villa Spalletti<br><span class="translatable" data-en="Rubiera, Italy" data-fr="Rubiera, Italie">Rubiera, Italy</span></p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -343,12 +399,6 @@
         </div>
     </footer>
 
-    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
-    <script type="text/javascript">
-        (function(){
-            emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
-        })();
-    </script>
     <script src="script.js"></script>
     
     <!-- Floating warm stars -->
