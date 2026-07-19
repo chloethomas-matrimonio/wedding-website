@@ -199,14 +199,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add scroll effect to navbar
+function updateHeroParallax() {
+    const hero = document.querySelector('.hero');
+    const heroBg = document.querySelector('.hero-background');
+    if (!hero || !heroBg) return;
+
+    const rect = hero.getBoundingClientRect();
+    const offset = Math.max(0, -rect.top);
+    const shift = Math.min(offset * 0.55, 160);
+    heroBg.style.transform = `translateY(${shift}px)`;
+}
+
+// Add scroll effect to navbar and hero background
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
-    if(window.scrollY > 50) {
+    if (window.scrollY > 50) {
         navbar.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
     } else {
         navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
     }
+    updateHeroParallax();
 });
 
 // Initialize on page load
@@ -218,7 +230,47 @@ document.addEventListener('DOMContentLoaded', function() {
     envelope.classList.remove('opening');
     initLanguageSwitcher();
     setLanguage('en');
+    updateHeroParallax();
     
+    // Initialize countdown if present
+    if (typeof initCountdown === 'function') initCountdown();
+
     console.log('🎊 Wedding site loaded');
     console.log('✓ Form handler ready (using FormSubmit service)');
 });
+
+// Countdown implementation
+function initCountdown() {
+    // Target wedding date/time (local) — adjust time if needed
+    const target = new Date('2027-07-31T16:00:00');
+
+    const els = {
+        days: document.getElementById('days'),
+        hours: document.getElementById('hours'),
+        minutes: document.getElementById('minutes'),
+        seconds: document.getElementById('seconds')
+    };
+
+    if (!els.days) return; // no countdown present
+
+    function update() {
+        const now = new Date();
+        let diff = Math.max(0, target - now);
+
+        const s = Math.floor((diff / 1000) % 60);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        els.days.textContent = String(d).padStart(2, '0');
+        els.hours.textContent = String(h).padStart(2, '0');
+        els.minutes.textContent = String(m).padStart(2, '0');
+        els.seconds.textContent = String(s).padStart(2, '0');
+    }
+
+    update();
+    const intervalId = setInterval(() => {
+        update();
+        if (new Date() >= target) clearInterval(intervalId);
+    }, 1000);
+}
