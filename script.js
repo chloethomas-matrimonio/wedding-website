@@ -24,13 +24,9 @@ function checkPassword(event) {
     const inputHash = hashString(passwordInput.value.trim());
 
     if (inputHash === CORRECT_PASSWORD_HASH) {
-        // 1. Unfocus the input to close mobile keyboard and reset browser zoom
         resetMobileZoom();
-        
-        // 2. Save authentication state
         sessionStorage.setItem(PASSWORD_SESSION_KEY, 'true');
         
-        // 3. Hide password elements & trigger animation
         if (passwordError) passwordError.style.display = 'none';
         if (envelopePassword) envelopePassword.classList.add('hidden');
         
@@ -42,29 +38,22 @@ function checkPassword(event) {
     }
 }
 
-
-
 function resetMobileZoom() {
-    // 1. Unfocus input to dismiss keyboard
     if (document.activeElement) {
         document.activeElement.blur();
     }
 
-    // 2. Force iOS Safari / Android to snap back to 1.0 scale
     const viewportMeta = document.querySelector('meta[name="viewport"]');
     if (viewportMeta) {
         const originalContent = viewportMeta.getAttribute('content') || 'width=device-width, initial-scale=1.0';
         
-        // Temporarily lock scale to 1.0
         viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
         
-        // Restore original meta after reset completes
         setTimeout(() => {
             viewportMeta.setAttribute('content', originalContent);
         }, 300);
     }
 
-    // 3. Reset scroll offset
     window.scrollTo(0, 0);
 }
 
@@ -100,43 +89,20 @@ function openLetterAnimation(event) {
         return;
     }
 
-    // Prevent multiple clicks
-    if (envelope.classList.contains('opening')) return;
+    if (!envelope || envelope.classList.contains('opening')) return;
     
     envelope.classList.add('opening');
     
     setTimeout(() => {
-        overlay.classList.remove('active');
-        overlay.classList.add('hidden');
-        
+        if (overlay) {
+            overlay.classList.remove('active');
+            overlay.classList.add('hidden');
+        }
         window.scrollTo(0, 0);
     }, 2200);
 }
 
-/*// Close Letter Animation - Go directly to website
-function closeLetter() {
-    const overlay = document.getElementById('letterOverlay');
-    overlay.classList.add('hidden');
-    
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 800);
-    
-    // Scroll to top of website
-    window.scrollTo(0, 0);
-}
-
-// Close letter with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const overlay = document.getElementById('letterOverlay');
-        if (overlay && !overlay.classList.contains('hidden')) {
-            closeLetter();
-        }
-    }
-});
-*/
-// Translate page content between English and French
+// Language Switcher
 function setLanguage(lang) {
     document.documentElement.lang = lang;
 
@@ -167,77 +133,68 @@ function initLanguageSwitcher() {
     });
 }
 
-// Initialize EmailJS when SDK is ready
-// (No longer needed - using FormSubmit instead)
+// RSVP Form Handler - Safely initialized inside DOMContentLoaded
+function initRsvpForm() {
+    const rsvpForm = document.getElementById('rsvpForm');
+    if (!rsvpForm) return;
 
+    const alertMessages = {
+        en: name => `Thank you ${name}! We've received your message.\n\nWe look forward to celebrating with you!`,
+        fr: name => `Merci ${name} ! Nous avons bien reçu votre message.\n\nNous avons hâte de célébrer avec vous !`
+    };
 
-// RSVP Form Handler - Using FormSubmit service
-const rsvpForm = document.getElementById('rsvpForm');
+    rsvpForm.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-const alertMessages = {
-    en: name => `Thank you ${name}! We've received your RSVP.\n\nWe look forward to celebrating with you!`,
-    fr: name => `Merci ${name} ! Nous avons bien reçu votre RSVP.\n\nNous avons hâte de célébrer avec vous !`
-};
-
-rsvpForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    console.log('✓ RSVP form submit handler triggered');
-    const name = document.getElementById('name').value;
-    const language = document.documentElement.lang || 'en';
-    
-    const submitBtn = this.querySelector('.btn-submit');
-    if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.dataset._origText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-    }
-
-    // Show success message immediately
-    alert(alertMessages[language](name));
-
-    // Submit form to FormSubmit service
-    try {
-        // Create FormData from the form
-        const formData = new FormData(this);
+        const nameInput = document.getElementById('name');
+        const name = nameInput ? nameInput.value : '';
+        const language = document.documentElement.lang || 'fr';
         
+        const submitBtn = this.querySelector('.btn-submit');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.dataset._origText = submitBtn.textContent;
+            submitBtn.textContent = (language === 'fr') ? 'Envoi...' : 'Sending...';
+        }
+
+        const formData = new FormData(this);
+
+        // Fetch request with required JSON header for FormSubmit
         fetch(this.action, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
         })
         .then(response => {
-            console.log('✓ RSVP submitted successfully');
-            rsvpForm.reset();
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
-                delete submitBtn.dataset._origText;
+            if (response.ok) {
+                alert(alertMessages[language](name));
+                rsvpForm.reset();
+            } else {
+                alert(language === 'fr' ? 'Une erreur est survenue. Veuillez réessayer.' : 'An error occurred. Please try again.');
             }
         })
         .catch(error => {
             console.error('✗ Form submission error:', error);
+            alert(language === 'fr' ? 'Une erreur est survenue. Veuillez réessayer.' : 'An error occurred. Please try again.');
+        })
+        .finally(() => {
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
+                submitBtn.textContent = submitBtn.dataset._origText || 'Submit';
                 delete submitBtn.dataset._origText;
             }
         });
-    } catch (error) {
-        console.error('Error:', error);
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = submitBtn.dataset._origText || 'Submit RSVP';
-            delete submitBtn.dataset._origText;
-        }
-    }
-});
+    });
+}
 
 // Smooth Navigation
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        if(target) {
+        if (target) {
             const offsetTop = target.offsetTop - 90;
             window.scrollTo({
                 top: offsetTop,
@@ -258,38 +215,34 @@ function updateHeroParallax() {
     heroBg.style.transform = `translateY(${shift}px)`;
 }
 
-// Add scroll effect to navbar and hero background
+// Scroll effects
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+    if (navbar) {
+        navbar.style.boxShadow = window.scrollY > 50 ? '0 4px 15px rgba(0, 0, 0, 0.1)' : '0 2px 10px rgba(0, 0, 0, 0.05)';
     }
     updateHeroParallax();
 });
 
-// Initialize on page load
+// Main Page Initialization
 document.addEventListener('DOMContentLoaded', function() {
-    // Check password authentication first
     checkAuthentication();
     
     const envelope = document.getElementById('envelope');
-    envelope.classList.remove('opening');
+    if (envelope) envelope.classList.remove('opening');
+    
     initLanguageSwitcher();
     setLanguage('fr');
+    initRsvpForm(); // Safely binds the RSVP submit event
     updateHeroParallax();
     
-    // Initialize countdown if present
     if (typeof initCountdown === 'function') initCountdown();
 
     console.log('🎊 Wedding site loaded');
-    console.log('✓ Form handler ready (using FormSubmit service)');
 });
 
 // Countdown implementation
 function initCountdown() {
-    // Target wedding date/time (local) — adjust time if needed
     const target = new Date('2027-07-31T16:00:00');
 
     const els = {
@@ -299,7 +252,7 @@ function initCountdown() {
         seconds: document.getElementById('seconds')
     };
 
-    if (!els.days) return; // no countdown present
+    if (!els.days) return;
 
     function update() {
         const now = new Date();
