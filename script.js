@@ -1,20 +1,42 @@
-// Password Protection
-const CORRECT_PASSWORD = 'Italie2027';
+// Password Protection 
+const CORRECT_PASSWORD_HASH = 533025672;
 const PASSWORD_SESSION_KEY = 'wedding_authenticated';
 
+// One-way hash function
+function hashString(str) {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+    }
+    return hash >>> 0;
+}
+
 function checkPassword(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
+    
     const passwordInput = document.getElementById('passwordInput');
     const passwordError = document.getElementById('passwordError');
     const envelopePassword = document.getElementById('envelopePassword');
     
-    if (passwordInput.value === CORRECT_PASSWORD) {
+    if (!passwordInput) return;
+
+    // Hash user input and compare to stored hash
+    const inputHash = hashString(passwordInput.value.trim());
+
+    if (inputHash === CORRECT_PASSWORD_HASH) {
+        // 1. Unfocus the input to close mobile keyboard and reset browser zoom
+        passwordInput.blur();
+        
+        // 2. Save authentication state
         sessionStorage.setItem(PASSWORD_SESSION_KEY, 'true');
-        passwordError.style.display = 'none';
+        
+        // 3. Hide password elements & trigger animation
+        if (passwordError) passwordError.style.display = 'none';
         if (envelopePassword) envelopePassword.classList.add('hidden');
+        
         openLetterAnimation();
     } else {
-        passwordError.style.display = 'block';
+        if (passwordError) passwordError.style.display = 'block';
         passwordInput.value = '';
         passwordInput.focus();
     }
@@ -65,7 +87,7 @@ function openLetterAnimation(event) {
     }, 2200);
 }
 
-// Close Letter Animation - Go directly to website
+/*// Close Letter Animation - Go directly to website
 function closeLetter() {
     const overlay = document.getElementById('letterOverlay');
     overlay.classList.add('hidden');
@@ -87,7 +109,7 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-
+*/
 // Translate page content between English and French
 function setLanguage(lang) {
     document.documentElement.lang = lang;
@@ -229,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const envelope = document.getElementById('envelope');
     envelope.classList.remove('opening');
     initLanguageSwitcher();
-    setLanguage('en');
+    setLanguage('fr');
     updateHeroParallax();
     
     // Initialize countdown if present
