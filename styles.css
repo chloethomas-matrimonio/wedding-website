@@ -1433,10 +1433,10 @@ a.detail-card:hover {
     }
     .envelope-password input {
         flex: 1 1 auto;
-        width: 55%;
+        width: 65%;
         min-width: 0 !important;
         height: 28px !important;
-        font-size: 11px !important;
+        font-size: 16px !important;
         padding: 2px 8px !important;
         border-radius: 999px;
     }
@@ -1451,9 +1451,9 @@ a.detail-card:hover {
         min-width: 0 !important;
         transform: translateY(-4px); /* BUTTON ONLY HIGHER: Slight vertical nudge */
     }
-    .envelope-text { transform: translateY(-12px); }
-    .envelope-text text:nth-child(1) { font-size: 36px !important; }
-    .envelope-text text:nth-child(2) { font-size: 12px !important; }
+    .envelope-text { transform: translateY(-20px); }
+    .envelope-text text:nth-child(1) { font-size: 40px !important; }
+    .envelope-text text:nth-child(2) { font-size: 16px !important; }
     .envelope-password .password-error {
         display: block;
         text-align: center;
@@ -1479,7 +1479,7 @@ a.detail-card:hover {
     }
     .envelope-password input {
         height: 26px !important;
-        font-size: 10px !important;
+        font-size: 16px !important;
     }
     .envelope-password button {
         height: 20px !important;
