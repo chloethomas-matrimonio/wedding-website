@@ -238,6 +238,26 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (typeof initCountdown === 'function') initCountdown();
 
+    const travelVideo = document.querySelector('.travel-video video');
+    
+    if (travelVideo) {
+        // Sur mobile, forcer le 'muted' via le JS débloque souvent l'autoplay
+        travelVideo.muted = true;
+        
+        // Tente de lancer la vidéo
+        const playPromise = travelVideo.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Autoplay bloqué par le navigateur mobile :", error);
+                // Optionnel : Réessayer de lancer la vidéo dès que l'utilisateur touche l'écran
+                document.addEventListener('touchstart', function() {
+                    travelVideo.play();
+                }, { once: true });
+            });
+        }
+    }
+
     console.log('🎊 Wedding site loaded');
 });
 
