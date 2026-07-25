@@ -25,7 +25,7 @@ function checkPassword(event) {
 
     if (inputHash === CORRECT_PASSWORD_HASH) {
         // 1. Unfocus the input to close mobile keyboard and reset browser zoom
-        passwordInput.blur();
+        resetMobileZoom();
         
         // 2. Save authentication state
         sessionStorage.setItem(PASSWORD_SESSION_KEY, 'true');
@@ -40,6 +40,32 @@ function checkPassword(event) {
         passwordInput.value = '';
         passwordInput.focus();
     }
+}
+
+
+
+function resetMobileZoom() {
+    // 1. Unfocus input to dismiss keyboard
+    if (document.activeElement) {
+        document.activeElement.blur();
+    }
+
+    // 2. Force iOS Safari / Android to snap back to 1.0 scale
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta) {
+        const originalContent = viewportMeta.getAttribute('content') || 'width=device-width, initial-scale=1.0';
+        
+        // Temporarily lock scale to 1.0
+        viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+        
+        // Restore original meta after reset completes
+        setTimeout(() => {
+            viewportMeta.setAttribute('content', originalContent);
+        }, 300);
+    }
+
+    // 3. Reset scroll offset
+    window.scrollTo(0, 0);
 }
 
 // Check if already authenticated (for page refreshes during session)
