@@ -140,7 +140,7 @@ function initRsvpForm() {
 
     const alertMessages = {
         en: name => `Thank you ${name}! We've received your message.\n\nWe look forward to celebrating with you!`,
-        fr: name => `Merci ${name} ! Nous avons bien reçu votre message.\n\nNous avons hâte de célébrer avec vous !`
+        fr: name => `Merci ${name} ! Nous avons bien reçu votre message.\n\nNous avons hâte de célébrer avec vous tous!`
     };
 
     rsvpForm.addEventListener('submit', function(e) {
