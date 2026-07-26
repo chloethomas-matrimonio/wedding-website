@@ -295,3 +295,20 @@ function initCountdown() {
         if (new Date() >= target) clearInterval(intervalId);
     }, 1000);
 }
+
+let lastScrollTop = 0;
+  const navbar = document.querySelector('.navbar');
+
+  window.addEventListener('scroll', () => {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 30) {
+          // Scrolling DOWN -> Add hidden class to navbar
+          if (navbar) navbar.classList.add('hide-lang');
+      } else {
+          // Scrolling UP -> Remove hidden class from navbar
+          if (navbar) navbar.classList.remove('hide-lang');
+      }
+      
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  });

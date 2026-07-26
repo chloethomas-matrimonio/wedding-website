@@ -109,16 +109,34 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: 0;      /* Removes top gap */
+    padding-bottom: 0;   /* Removes bottom gap */
 }
 
+/* Constrain the image size */
+.logo-img {
+    height: 80px;        /* Adjust this pixel value until it looks right */
+    width: auto;         /* Prevents stretching/distortion */
+    max-height: 100%;    /* Ensures it stays inside the navbar boundary */
+    object-fit: contain;
+}
+
+/* Ensure the wrapper link centers the image vertically */
 .logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+}
+
+/*.logo {
     font-family: 'Playfair Display', serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--gold);
     text-decoration: none;
     letter-spacing: 2px;
-}
+}*/
 
 .nav-menu {
     list-style: none;
@@ -1159,7 +1177,7 @@ a.detail-card:hover {
     .nav-menu { gap: 15px; font-size: 13px; }
     .nav-link { padding: 8px 4px; }
 
-    .lang-switcher { padding: 6px 10px; gap: 8px; }
+    .lang-switcher { padding: 2px 5px; gap: 8px; }
     .lang-btn { font-size: 11px; padding: 3px 6px; }
 
     .hero {
@@ -1329,7 +1347,7 @@ a.detail-card:hover {
     .scroll-btn { font-size: 9px; padding: 6px 12px; margin-top: 15px; }
 
     .nav-container {
-        padding: 10px 12px;
+        padding: 5px 12px;
         flex-wrap: wrap;
         justify-content: center;
         gap: 8px;
@@ -1344,8 +1362,36 @@ a.detail-card:hover {
     }
     .nav-menu li { flex: 0 1 auto; }
 
-    .lang-switcher { padding: 6px 8px; gap: 6px; border-radius: 20px; }
-    .lang-btn { font-size: 10px; padding: 3px 6px; }
+
+
+    .lang-switcher {
+        display: inline-flex;
+        align-items: center;      /* Perfect vertical centering */
+        justify-content: center;  /* Perfect horizontal centering */
+        padding: 3px 8px;         /* Even top/bottom padding */
+        gap: 6px;
+        border-radius: 20px;
+    }
+
+    .lang-btn {
+        font-size: 10px;
+        padding: 0 6px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;      /* Vertically centers button text */
+        justify-content: center;  /* Horizontally centers button text */
+        height: 100%;             /* Ensures button matches container height */
+    }
+
+    /* Keeps the divider aligned on the exact same center axis */
+    .lang-divider {
+        font-size: 10px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    
 
     .container { padding: 0 16px; }
     section { padding: 40px 16px; scroll-margin-top: 110px; }
@@ -1522,4 +1568,36 @@ a.detail-card:hover {
     section { padding: 30px 12px; }
     .container { padding: 0 12px; }
     .rsvp-form { padding: 16px 12px; }
+}
+
+/* Base state with smooth transitions */
+
+/* Base state of the language switcher */
+.lang-switcher {
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+    max-width: 150px;
+    max-height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* When scrolling down: Collapse width, height, padding, and margins to 0 */
+.navbar.hide-lang .lang-switcher {
+    opacity: 0;
+    max-width: 0;
+    max-height: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border: none;
+    pointer-events: none;
+}
+
+/* Tighten container gap so no ghost space remains */
+.navbar.hide-lang .nav-container {
+    gap: 2px !important;
 }
