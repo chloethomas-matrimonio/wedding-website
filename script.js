@@ -312,3 +312,4 @@ let lastScrollTop = 0;
       
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   });
+
